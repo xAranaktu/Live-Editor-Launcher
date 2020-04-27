@@ -20,6 +20,7 @@ Global Const $CONFIG_INI = @ScriptDir & "\launcher_config.ini"
 Global Const $INJECTOR = @ScriptDir & "\Injector\Injector.exe"
 Global $PROC_NAME = "FIFA20.exe"
 Global $DLL_NAME = "FIFALiveEditor.DLL"
+Global $INJECT_DELAY = 5000
 Global $DLL_INJECTED = False
 ReadConfigIni()
 
@@ -161,6 +162,7 @@ Func AboutWindow()
 Func ReadConfigIni()
    $PROC_NAME = IniRead($CONFIG_INI, "Settings", "PROC_NAME", $PROC_NAME)
    $DLL_NAME = IniRead($CONFIG_INI, "Settings", "DLL_NAME", $DLL_NAME)
+   $INJECT_DELAY = int(IniRead($CONFIG_INI, "Settings", "INJECT_DELAY", $INJECT_DELAY))
 EndFunc
 
 Func Inject_DLL()
@@ -188,6 +190,9 @@ Func Inject_DLL()
    $cmd = '"' & $INJECTOR & '" --process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
    Local $params = '--process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
 
+   if $INJECT_DELAY > 0 Then
+	  Sleep($INJECT_DELAY)
+   EndIf
    ;local $inject_ret = RunWait(@ComSpec & " /C " & $cmd, "", @SW_MAXIMIZE  )
    local $inject_ret = ShellExecuteWait($INJECTOR, $params, "", "", @SW_HIDE )
    If $inject_ret == 0 Then
