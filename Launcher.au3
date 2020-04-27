@@ -60,10 +60,9 @@ $GUI_FSRestore_BUTTON = $Control_Buttons[5]
 $GUI_MENU_BUTTON = $Control_Buttons[6]
 ;======================================================================================================================================================================
 
-AdlibRegister("Inject_DLL", 100)
+
 GUISetState(@SW_SHOW)
 While 1
-   If ($DLL_INJECTED) Then _EXIT() EndIf
 	$nMsg = GUIGetMsg()
 	Switch $nMsg
 		Case $GUI_EVENT_CLOSE, $GUI_CLOSE_BUTTON
@@ -94,6 +93,9 @@ While 1
 					_EXIT()
 			EndSwitch
 	EndSwitch
+
+   Sleep(100)
+   Inject_DLL()
  WEnd
 
 Func SettingsWindow()
@@ -162,11 +164,19 @@ Func ReadConfigIni()
 EndFunc
 
 Func Inject_DLL()
-   If ($DLL_INJECTED) Then Return EndIf
+   If ($DLL_INJECTED) Then
+	  _EXIT()
+   EndIf
+   local $DLL_PATH = @ScriptDir & "\" & $DLL_NAME
 
-   if @AutoItX64 <= 0 Then
-	  MsgBox(16, "Launcher", "Not 64bit")
-	  Exit
+   If Not FileExists($DLL_PATH) Then
+	  MsgBox(16, "Launcher", "Error, file not exists:\n" & $DLL_PATH)
+	  _EXIT()
+   EndIf
+
+   If Not FileExists($INJECTOR) Then
+	  MsgBox(16, "Launcher", "Error, file not exists:\n" & $INJECTOR)
+	  _EXIT()
    EndIf
 
    local $pid = ProcessExists($PROC_NAME)
@@ -175,17 +185,22 @@ Func Inject_DLL()
    EndIf
    GUICtrlSetData($main_lbl_2, "Injecting DLL")
 
-   local $DLL_PATH = @ScriptDir & "\" & $DLL_NAME
-   $cmd = '"' & $INJECTOR & '" --process-name ' & $PROC_NAME & ' --inject ' & $DLL_PATH
+   $cmd = '"' & $INJECTOR & '" --process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
+   Local $params = '--process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
 
-   RunWait(@ComSpec & " /C " & $cmd, "", @SW_HIDE)
-   ConsoleWrite($cmd & @CRLF)
-   GUICtrlSetData($main_lbl_2, "Done")
-   $DLL_INJECTED = True
+   ;local $inject_ret = RunWait(@ComSpec & " /C " & $cmd, "", @SW_MAXIMIZE  )
+   local $inject_ret = ShellExecuteWait($INJECTOR, $params, "", "", @SW_HIDE )
+   If $inject_ret == 0 Then
+	  GUICtrlSetData($main_lbl_2, "Done")
+	  $DLL_INJECTED = True
+	  MsgBox(0, "", "DLL Injected" & @CRLF & $INJECTOR & @CRLF & $params)
+   Else
+	  MsgBox(16, "", "DLL Inject failed." & @CRLF & "Injector path: " & $INJECTOR & @CRLF & "Params: " & $params)
+   EndIf
+   _EXIT()
 EndFunc
 
 Func _EXIT()
-   AdlibUnRegister("Inject_DLL")
    _Metro_GUIDelete($Form1) ;Delete GUI/release resources, make sure you use this when working with multiple GUIs!
    Exit
 EndFunc
