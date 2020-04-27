@@ -193,7 +193,6 @@ Func Inject_DLL()
    If $inject_ret == 0 Then
 	  GUICtrlSetData($main_lbl_2, "Done")
 	  $DLL_INJECTED = True
-	  MsgBox(0, "", "DLL Injected" & @CRLF & $INJECTOR & @CRLF & $params)
    Else
 	  MsgBox(16, "", "DLL Inject failed." & @CRLF & "Injector path: " & $INJECTOR & @CRLF & "Params: " & $params)
    EndIf
