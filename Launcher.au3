@@ -10,6 +10,7 @@
 #AutoIt3Wrapper_Res_HiDpi=y
 
 #NoTrayIcon
+#RequireAdmin
 #include "UDF\MetroGUI-UDF\MetroGUI_UDF.au3"
 #include "UDF\MetroGUI-UDF\_GUIDisable.au3" ; For dim effects when msgbox is displayed
 #include <GUIConstants.au3>
@@ -22,6 +23,7 @@ Global $PROC_NAME = "FIFA20.exe"
 Global $DLL_NAME = "FIFALiveEditor.DLL"
 Global $INJECT_DELAY = 5000
 Global $DLL_INJECTED = False
+CheckRights()
 ReadConfigIni()
 
 ;=======================================================================Creating the GUI===============================================================================
@@ -202,6 +204,13 @@ Func Inject_DLL()
 	  MsgBox(16, "", "DLL Inject failed." & @CRLF & "Injector path: " & $INJECTOR & @CRLF & "Params: " & $params)
    EndIf
    _EXIT()
+EndFunc
+
+Func CheckRights()
+   If Not IsAdmin() Then
+	  MsgBox(16, "", "Run Launcher as Admin")
+	  _EXIT()
+   EndIf
 EndFunc
 
 Func _EXIT()
