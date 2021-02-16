@@ -1,5 +1,6 @@
 ;!Highly recommended for improved overall performance and responsiveness of the GUI effects etc.! (after compiling):
 #AutoIt3Wrapper_Run_Au3Stripper=y
+#AutoIt3Wrapper_Icon=ico.ico
 #Au3Stripper_Parameters=/so /rm /pe
 
 ;YOU NEED TO EXCLUDE FOLLOWING FUNCTIONS FROM AU3STRIPPER, OTHERWISE IT WON'T WORK:
@@ -19,9 +20,9 @@
 Global Const $GITHUB = "https://github.com/xAranaktu/FIFA-20-Live-Editor-Launcher"
 Global Const $CONFIG_INI = @ScriptDir & "\launcher_config.ini"
 Global Const $INJECTOR = @ScriptDir & "\Injector\Injector.exe"
-Global $PROC_NAME = "FIFA20.exe"
+Global $PROC_NAME = "FIFA21.exe"
 Global $DLL_NAME = "FIFALiveEditor.DLL"
-Global $INJECT_DELAY = 5000
+Global $INJECT_DELAY = 6000
 Global $DLL_INJECTED = False
 CheckRights()
 ReadConfigIni()
@@ -34,18 +35,18 @@ _Metro_EnableHighDPIScaling() ; Note: Requries "#AutoIt3Wrapper_Res_HiDpi=y" for
 _SetTheme("DarkTeal") ;See MetroThemes.au3 for selectable themes or to add more
 
 ;Create resizable Metro GUI
-Global Const $Wnd_Title = "FIFA 20 Live Editor Launcher"
+Global Const $Wnd_Title = "FIFA 21 Live Editor Launcher"
 
 $Form1 = _Metro_CreateGUI($Wnd_Title, 500, 300, -1, -1, True)
 $TitleLabel = GUICtrlCreateLabel($Wnd_Title, 60, 45, 440, 33)
 GUICtrlSetFont (-1, 25, 400, 0, "Calibri", 3)
 GUICtrlSetColor(-1, $FontThemeColor)
 
-$main_lbl_1 = GUICtrlCreateLabel("Status:", 20, 90, 70, 33)
+$main_lbl_1 = GUICtrlCreateLabel("Status:", 20, 100, 70, 33)
 GUICtrlSetFont (-1, 15, 400, 0, "Calibri", 3)
 GUICtrlSetColor(-1, $FontThemeColor)
 
-$main_lbl_2 = GUICtrlCreateLabel("Waiting for " & $PROC_NAME & " process", 120, 90, 350, 33)
+$main_lbl_2 = GUICtrlCreateLabel("Waiting for " & $PROC_NAME & " process", 120, 100, 350, 33)
 GUICtrlSetFont (-1, 15, 400, 0, "Calibri", 3)
 GUICtrlSetColor(-1, $FontThemeColor)
 
@@ -189,8 +190,8 @@ Func Inject_DLL()
    EndIf
    GUICtrlSetData($main_lbl_2, "Injecting DLL")
 
-   $cmd = '"' & $INJECTOR & '" --process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
-   Local $params = '--process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
+   ;$cmd = '"' & $INJECTOR & '" --process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '"'
+   Local $params = '--process-name ' & $PROC_NAME & ' --inject "' & $DLL_PATH & '" & " > result.txt"'
 
    if $INJECT_DELAY > 0 Then
 	  Sleep($INJECT_DELAY)
