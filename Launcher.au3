@@ -20,7 +20,7 @@
 Global Const $GITHUB = "https://github.com/xAranaktu/FIFA-20-Live-Editor-Launcher"
 Global Const $CONFIG_INI = @ScriptDir & "\launcher_config.ini"
 Global Const $INJECTOR = @ScriptDir & "\Injector\Injector.exe"
-Global $PROC_NAME = "FIFA21.exe"
+Global $PROC_NAME = "FIFA22.exe"
 Global $DLL_NAME = "FIFALiveEditor.DLL"
 Global $INJECT_DELAY = 6000
 Global $DLL_INJECTED = False
